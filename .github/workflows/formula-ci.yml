@@ -1,0 +1,38 @@
+name: Homebrew Formula CI
+
+on:
+  pull_request:
+    paths:
+      - "Formula/**"
+
+jobs:
+  audit:
+    name: brew audit
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tap local repository
+        run: |
+          mkdir -p "$(brew --repository)/Library/Taps/chrismcdermut/homebrew-tap"
+          cp -a . "$(brew --repository)/Library/Taps/chrismcdermut/homebrew-tap"
+
+      - name: Run brew audit --strict --online
+        run: brew audit --strict --online prlt
+
+  test:
+    name: brew test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tap local repository
+        run: |
+          mkdir -p "$(brew --repository)/Library/Taps/chrismcdermut/homebrew-tap"
+          cp -a . "$(brew --repository)/Library/Taps/chrismcdermut/homebrew-tap"
+
+      - name: Install formula
+        run: brew install prlt
+
+      - name: Run brew test
+        run: brew test prlt
