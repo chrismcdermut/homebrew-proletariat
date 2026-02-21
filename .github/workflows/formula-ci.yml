@@ -4,6 +4,12 @@ on:
   pull_request:
     paths:
       - "Formula/**"
+      - ".github/workflows/formula-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "Formula/**"
+      - ".github/workflows/formula-ci.yml"
 
 jobs:
   audit:
