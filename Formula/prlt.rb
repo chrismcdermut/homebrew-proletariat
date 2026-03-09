@@ -1,8 +1,8 @@
 class Prlt < Formula
   desc "Agent orchestration platform for AI labor"
   homepage "https://proletariat.ai/"
-  url "https://registry.npmjs.org/@proletariat/cli/-/cli-0.3.55.tgz"
-  sha256 "4013a45ddff237e8cae6f4e97e60963f2a1d736dc23cee663b5be049d69d4c75"
+  url "https://registry.npmjs.org/@proletariat/cli/-/cli-0.3.56.tgz"
+  sha256 "b5dddacfacf7889ac8d36f404b52a0c8f1cbc9edca43fa56b77f7324a1a11216"
   license "Apache-2.0"
 
   depends_on "node"
@@ -23,6 +23,6 @@ class Prlt < Formula
   test do
     assert_match version.to_s, shell_output("#{bin}/prlt --version")
     # Verify better-sqlite3 native module works by creating an HQ (uses SQLite)
-    assert_match '"success": true', shell_output("#{bin}/prlt init --json --name test-hq --no-pmo")
+    assert_match '"success": true', shell_output("#{bin}/prlt new --json --name test-hq --no-pmo")
   end
 end
