@@ -5,6 +5,11 @@ class Prlt < Formula
   sha256 "04639c1f1c3fb4ed0c1d41f9a838856dc1634ed59a63f94d454649ce3d43f338"
   license "Apache-2.0"
 
+  livecheck do
+    url "https://registry.npmjs.org/@proletariat/cli"
+    regex(/"latest"\s*:\s*"([^"]+)"/i)
+  end
+
   depends_on "node"
 
   def install
