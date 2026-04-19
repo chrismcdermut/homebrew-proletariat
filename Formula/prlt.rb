@@ -1,8 +1,8 @@
 class Prlt < Formula
   desc "Agent orchestration platform for AI labor"
   homepage "https://proletariat.ai/"
-  url "https://registry.npmjs.org/@proletariat/cli/-/cli-0.3.126.tgz"
-  sha256 "e8408df7d0d0e7cecefd158a51698c0ee00774d426a0cb480d806eed465a251c"
+  url "https://registry.npmjs.org/@proletariat/cli/-/cli-0.3.127.tgz"
+  sha256 "422b76f6c11c973ac767d9a170f6675777d78c3426f12dd8c5ce01d70b32ac7b"
   license "Apache-2.0"
 
   depends_on "node"
