@@ -1,0 +1,65 @@
+name: Homebrew Formula CI
+
+on:
+  pull_request:
+    paths:
+      - "Formula/**"
+      - ".github/workflows/formula-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "Formula/**"
+      - ".github/workflows/formula-ci.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: brew audit
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tap local repository
+        run: |
+          mkdir -p "$(brew --repository)/Library/Taps/chrismcdermut/homebrew-tap"
+          cp -a . "$(brew --repository)/Library/Taps/chrismcdermut/homebrew-tap"
+
+      - name: Run brew audit --strict --online
+        run: brew audit --strict --online prlt
+
+  test:
+    name: brew test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tap local repository
+        run: |
+          mkdir -p "$(brew --repository)/Library/Taps/chrismcdermut/homebrew-tap"
+          cp -a . "$(brew --repository)/Library/Taps/chrismcdermut/homebrew-tap"
+
+      - name: Install formula
+        run: brew install prlt
+
+      - name: Run brew test
+        run: brew test prlt
+
+  # Merge gate: all formula checks must pass
+  formula-checks:
+    name: Formula Checks
+    if: always()
+    needs: [audit, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all checks passed
+        run: |
+          if [[ "${{ needs.audit.result }}" != "success" || "${{ needs.test.result }}" != "success" ]]; then
+            echo "::error::One or more formula checks failed"
+            echo "  audit: ${{ needs.audit.result }}"
+            echo "  test:  ${{ needs.test.result }}"
+            exit 1
+          fi
+          echo "All formula checks passed"
